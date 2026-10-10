@@ -12,13 +12,12 @@ public class RoomManager : MonoBehaviour {
 
     public void Start() {
         _multiplayer = Multiplayer.Instance;
-        _multiplayer.RoomJoined.AddListener((mult, room, user) => OnRoomJoin(room.Name));
-        ChangeLoadingState(true);
-
-        if (PlayerInformation.IsCreatingNewRoom)
-            _multiplayer.JoinOnDemandRoom();
-        else
-            PlayerInformation.Room.Join();
+        if (_multiplayer.InRoom) {
+            OnRoomJoin(_multiplayer.CurrentRoom.Name);
+        } else {
+            ChangeLoadingState(true);
+            _multiplayer.RoomJoined.AddListener((mult, room, user) => OnRoomJoin(room.Name));
+        }
     }
 
     public void Leave() {
